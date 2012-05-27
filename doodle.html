@@ -1,0 +1,147 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Unnamed Project!</title>
+    <link href='http://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
+    <style>
+      ::-moz-selection{ background: #839496; color:#fff; text-shadow: none; }
+      ::selection { background: #839496; color:#fff; text-shadow: none; }
+      html {
+        height: 100%;
+      }
+      body {
+        background: url(http://subtlepatterns.com/patterns/ricepaper.png);
+        background: url(http://subtlepatterns.com/patterns/diagmonds.png);
+        background: #FDF6E3;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+      .editor {
+        background: #FDF6E3;
+        border: 0;
+        color: #657B83;
+        display: block;
+        font: 1.5em/1.2 Inconsolata,Monospace;
+        height: -webkit-calc(100% - 10px);
+        margin: 0 auto;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        padding: 0 10px 10px;
+        width: 999px;
+
+        resize: none;
+      }
+      .editor pre {
+        white-space: pre-wrap;
+      }
+      .editor::-webkit-scrollbar {
+        width: 10px;
+      }
+      .editor::-webkit-scrollbar-track {
+        background: #FDF6E3;
+      }
+      .editor::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background: #EEE8D5;
+        box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+      }
+
+      .editor:focus {
+        outline: none; /* Since this is the only interactive element, it's
+                          clearly what you should be interacting with. I don't
+                          feel terrible about removing the explicit focus
+                          ring.
+                        */
+      }
+      aside {
+        position: fixed;
+        left: -webkit-calc(50% + 254px);
+        top: 0;
+        font: 1em Inconsolata;
+        color: #93a1a1;
+        text-align: right;
+        width: 240px;
+
+        opacity: 1;
+        -webkit-transition: opacity 1s ease;
+        -moz-transition: opacity 1s ease;
+        -ms-transition: opacity 1s ease;
+        -o-transition: opacity 1s ease;
+        transition: opacity 1s ease;
+      }
+      aside:hover, aside:focus {
+        opacity: 1;
+      }
+    </style>
+    <script>
+      var Counter = function() {
+        this.text_ = document.querySelector('#text');
+        this.wordcount_ = document.querySelector('#wordcount');
+        this.charcount_ = document.querySelector('#charcount');
+        this.boundUpdate_ = this.update.bind(this);
+        this.text_.addEventListener('keydown', this.boundUpdate_);
+      };
+      Counter.prototype = {
+        text_: null,
+        count_: null,
+        update: function (e) {
+          if (e.keyCode === 189)
+            console.log("_");
+          if (e.keyCode === 221)
+            console.log("]");
+          if (window.getSelection) {
+            var selection = window.getSelection();
+            var range = selection.getRangeAt(0);
+            var toInsert = String.fromCharCode(e.keyCode);
+            if (!e.shiftKey && e.keyCode >= 65 && e.keyCode <= 90)
+              toInsert = toInsert.toLowerCase();
+            range.collapse(false);
+            selection.removeAllRanges();
+            selection.addRange(range);
+          }
+          //this.updateCount_();
+          //this.updateStyle_();
+        },
+        updateCount_: function () {
+          var cur = this.text_.innerText.replace(/^---\s[\S\s]+?\s---\s/, "");
+          this.wordcount_.innerText = cur.split(/ /).length;
+          this.charcount_.innerText = cur.split("").length;
+        },
+        updateStyle_: function () {
+          var cur = this.text_.innerText;
+          this.text_.innerHTML = "<pre>" + cur.replace(/_([a-zA-Z0-9\[\]\.:\/\-;]+)_/, "<em>&#x5f;$1&#x5f;</em>") + "</pre>";
+        }
+      }
+      document.addEventListener('DOMContentLoaded', function () {
+        var c = new Counter();
+      });
+    </script>
+  </head>
+  <body>
+    <aside>Counts: <output id="wordcount">0</output>&nbsp;words <output id="charcount">0</output>&nbsp;chars</aside>
+    <div id="text" class="editor" contenteditable="true"><pre>
+---
+Title: 
+---
+0123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
+We choose to go to the moon. We choose to go to the moon in this decade and do the other things, not because they are easy, but because they are hard, because that goal will serve to organize and measure the best of our energies and skills, because that challenge is one that we are willing to accept, one we are unwilling to postpone, and one which we intend to win, and the others, too.
+
+I am a stranger. I come in peace. Take me to your leader and there will be a massive reward for you in eternity.
+
+It has been said that astronomy is a humbling and character-building experience. There is perhaps no better demonstration of the folly of human conceits than this distant image of our tiny world. To me, it underscores our responsibility to deal more kindly with one another, and to preserve and cherish the pale blue dot, the only home we've ever known.
+0123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
+We choose to go to the moon. We choose to go to the moon in this decade and do the other things, not because they are easy, but because they are hard, because that goal will serve to organize and measure the best of our energies and skills, because that challenge is one that we are willing to accept, one we are unwilling to postpone, and one which we intend to win, and the others, too.
+
+I am a stranger. I come in peace. Take me to your leader and there will be a massive reward for you in eternity.
+
+It has been said that astronomy is a humbling and character-building experience. There is perhaps no better demonstration of the folly of human conceits than this distant image of our tiny world. To me, it underscores our responsibility to deal more kindly with one another, and to preserve and cherish the pale blue dot, the only home we've ever known.
+0123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
+We choose to go to the moon. We choose to go to the moon in this decade and do the other things, not because they are easy, but because they are hard, because that goal will serve to organize and measure the best of our energies and skills, because that challenge is one that we are willing to accept, one we are unwilling to postpone, and one which we intend to win, and the others, too.
+
+I am a stranger. I come in peace. Take me to your leader and there will be a massive reward for you in eternity.
+
+It has been said that astronomy is a humbling and character-building experience. There is perhaps no better demonstration of the folly of human conceits than this distant image of our tiny world. To me, it underscores our responsibility to deal more kindly with one another, and to preserve and cherish the pale blue dot, the only home we've ever known.
+    </pre></div>
+  </body>
+</html>
