@@ -1,0 +1,92 @@
+.editor {
+  border: 0;
+  display: block;
+  font: 1.5em/1.2 Inconsolata,Monospace;
+  height: -webkit-calc(100% - 10px);
+  margin: 0 auto;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  padding: 0 10px 10px;
+  width: 999px;
+
+  resize: none;
+}
+.editor #caretmarker {
+  display: none;
+}
+.editor code {
+}
+.editor strong {
+}
+.editor pre {
+  white-space: pre-wrap;
+}
+.editor::-webkit-scrollbar {
+  width: 10px;
+}
+.editor::-webkit-scrollbar-track {
+}
+.editor::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+}
+
+.editor:focus {
+  outline: none; /* Since this is the only interactive element, it's
+                    clearly what you should be interacting with. I don't
+                    feel terrible about removing the explicit focus
+                    ring.
+                  */
+}
+aside {
+  position: fixed;
+  left: -webkit-calc(50% + 254px);
+  top: 0;
+  font: 1em Inconsolata;
+  text-align: right;
+  width: 240px;
+}
+
+/** LIGHT COLOR SCHEME **/
+.light .editor {
+  background: #FDF6E3;
+  color: #657B83;
+}
+.light .editor code {
+  background: #EEE8D5;
+}
+.light .editor strong {
+  color: #586E75;
+}
+.light .editor::-webkit-scrollbar-track {
+  background: #FDF6E3;
+}
+.light .editor::-webkit-scrollbar-thumb {
+  background: #EEE8D5;
+}
+.light aside {
+  color: #586E75;
+}
+
+/** DARK COLOR SCHEME **/
+.dark .editor {
+  background: #002B36;
+  color: #839496;
+}
+.dark .editor code {
+  background: #073642;
+}
+.dark .editor strong {
+  color: #93A1A1;
+}
+.dark .editor::-webkit-scrollbar-track {
+  background: #002B36;
+}
+.dark .editor::-webkit-scrollbar-thumb {
+  background: #073642;
+}
+.dark aside {
+  color: #93A1A1;
+}
+
+
