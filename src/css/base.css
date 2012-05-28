@@ -1,0 +1,24 @@
+html {
+  height: 100%;
+}
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+body.light {
+  background: #FDF6E3;
+}
+body.dark {
+  background: #002B36;
+}
+.light ::-moz-selection{
+  background: #839496;
+  color:#fff;
+  text-shadow: none;
+}
+.light ::selection {
+  background: #839496;
+  color:#fff;
+  text-shadow: none;
+}

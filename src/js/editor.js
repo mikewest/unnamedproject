@@ -45,6 +45,15 @@ Editor.prototype = {
    */
   wordcount_: null,
 
+  set value(text) {
+    this.editor_.innerText = text;
+    this.update();
+  },
+
+  get value() {
+    return this.editor_.innerText;
+  },
+
   /**
    * One or two characters cause issues; this function triggers on `keydown`
    * in order to work around them.
@@ -82,7 +91,7 @@ Editor.prototype = {
       range.insertNode(document.createTextNode('{{ CARETMARKER }}'));
     }
 
-    var text = this.editor_.innerText;
+    var text = this.value;
     this.updateCount_(text);
     this.editor_.innerHTML = this.processText_(text);
     this.resetCaret_();

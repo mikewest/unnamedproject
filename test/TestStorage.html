@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Test the Storage.js Component</title>
+    <link rel="stylesheet" href="qunit.css">
+    <script src="qunit.js"></script>
+    <script src="../src/js/Storage.js"></script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Storage.js Test</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <script>
+      module("Reading and Writing", {
+        setup: function () {
+          stop();
+          this.s_ = new Storage(function () {
+            start();
+          });
+        },
+        teardown: function () {
+          stop();
+          this.s_.docroot_.removeRecursively(function () {
+            ok(true, "Tearing down.");    
+            start();
+          }, function(e) {
+            ok(false, "Tearing down.");    
+            start();
+          });
+        } 
+      });
+      asyncTest("Initialization", function () {
+        expect(3);
+        ok(this.s_.fs_, "FileSystem object exists.");
+        this.s_.fs_.root.getDirectory('Documents', {create: false},
+          function(dir) {
+            ok(true, '`Documents` directory exists.');
+            start();
+          },
+          function(e) {
+            ok(false, '`Documents` directory exists.');
+            start();
+          });
+      });
+      asyncTest("Read non-existant file creates it.", function () {
+        expect(3);
+        var name = 'file-does-not-exist';
+        this.s_.read(name, (function (text) {
+          equal(text, "", "Non-existant files return empty strings.");
+          this.s_.docroot_.getFile(
+            name,
+            {create: false},
+            function (fileEntry) {
+              ok(true, 'File exists.');
+              start();
+            },
+            function () {
+              ok(false, 'File exists.');
+              start();
+            });
+        }).bind(this));
+      });
+      asyncTest("Write non-existant file creates it.", function () {
+        expect(4);
+        var name = 'file-does-not-exist';
+        var data = 'Test data!';
+        this.s_.write(name, data, (function (success) {
+          ok(success, "File successfully written.");
+          this.s_.read(name, (function (text) {
+            equal(text, data, "File populated with correct data.");
+            this.s_.docroot_.getFile(
+              name,
+              {create: false},
+              function (fileEntry) {
+                ok(true, 'File exists.');
+                start();
+              },
+              function () {
+                ok(false, 'File exists.');
+                start();
+              })
+          }).bind(this));
+        }).bind(this));
+      });
+      asyncTest("Write existant file overwrites data.", function () {
+        expect(5);
+        var name = 'file-does-not-exist';
+        var data = 'Test data!';
+        var overwrite = 'Overwritten!';
+        var s = this.s_;
+        s.write(name, data, function (success) {
+          ok(success, "File successfully written.");
+          s.read(name, function (text) {
+            equal(text, data, "File populated with correct data.");
+            s.write(name, overwrite, function (success) {
+              ok(success, "File successfully written (again).");
+              s.read(name, function (text) {
+                equal(text, overwrite, "File overwritten with new data.");
+                start();
+              }); 
+            });
+          });
+        });
+      });
+      asyncTest("List single file.", function () {
+        var name = 'filename';
+        var data = 'A string!';
+        var s = this.s_;
+        s.write(name, data, function (success) {
+          ok(success, "File successfully written.");
+          s.list(function (files) {
+            equal(files.length, 1, "One file listed.");
+            equal(files[0], name, "Correct file listed.");
+            start();
+          });
+        });
+      });
+      asyncTest("List multiple files.", function () {
+        var data = 'string:';
+        var successes = 0;
+        var s = this.s_;
+
+        function doneWriting() {
+          equal(successes, 10, "10 files written");
+          s.list(function (files) {
+            equal(files.length, 10, "10 files listed.");
+            for (var i = 0; i < 10; i++) {
+              equal(files[i], 'file' + i, "File " + i + " listed in correct order.");
+            }
+            start();
+          });
+        }
+        for (var i = 0; i < 10; i++) {
+          s.write('file' + i, data + i, function (success) {
+            if (success)
+              successes += 1;
+            if (successes === 10)
+              doneWriting();
+          });
+        }
+        var s = this.s_;
+        s.write(name, data, function (success) {
+          ok(success, "File successfully written.");
+          s.list(function (files) {
+            equal(files.length, 1, "One file listed.");
+            equal(files[0], name, "Correct file listed.");
+            start();
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

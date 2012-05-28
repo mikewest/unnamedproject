@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Unnamed Project</title>
+    <link href='http://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
+    <link href='./css/base.css' rel='stylesheet' type='text/css'>
+    <link href='./css/editor.css' rel='stylesheet' type='text/css'>
+    <link href='./css/list.css' rel='stylesheet' type='text/css'>
+
+    <script src="./js/storage.js"></script>
+    <script src="./js/editor.js"></script>
+    <script src="./js/listview.js"></script>
+    <script src="./js/ui.js"></script>
+  </head>
+  <body class="light">
+    <section id="listsection">
+      <ol id="filelist"></ol>
+    </section>
+    <section id="editorsection"> 
+      <aside>Counts: <output id="wordcount">0</output>&nbsp;words <output id="charcount">0</output>&nbsp;chars</aside>
+      <div id="text" class="editor" contenteditable="true"></div>
+    </section>
+    <script src="./js/init.js"></script>
+  </body>
+</html>

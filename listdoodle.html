@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+  <head>
+    <title>FileSystem + List</title>
+    <script src="./src/js/listview.js"></script>
+  </head>
+  <body>
+    <ol id="list">
+    </ol>
+    <script>
+      var l = new ListView('list');
+      l.render([
+        '2012-05-01.markdown',
+        '2012-05-02.markdown',
+        '2012-05-03.markdown',
+        '2012-05-04.markdown',
+        '2012-05-05.markdown'
+      ], Date());
+    </script>
+  </body>
+</html>
