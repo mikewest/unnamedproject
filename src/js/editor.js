@@ -15,9 +15,10 @@ var Editor = function(editorID) {
   this.editor_.addEventListener('keydown', this.preprocessKeystroke_.bind(this));
   this.editor_.addEventListener('keyup', this.update.bind(this));
 
-  // Kick things off by focusing on the editor, and running a style update.
+  // Kick things off by focusing on the editor and running a style update.
   this.editor_.focus();
   this.update();
+  this.timer_ = null;
 };
 
 Editor.prototype = {
@@ -61,7 +62,17 @@ Editor.prototype = {
    * @param {!KeyboardEvent} e The keyboard event that we're responding to.
    */
   preprocessKeystroke_: function (e) {
-    if (e.keyCode === 13) { // ENTER
+    if (e.keyCode === 8) { // BACKSPACE
+      if (window.getSelection) {
+        var selection = window.getSelection();
+        var range = selection.getRangeAt(0);
+        if (!range.endOffset && !range.startOffset &&
+            range.startContainer === this.editor_) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }
+    } else if (e.keyCode === 13) { // ENTER
       e.preventDefault();
       e.stopPropagation();
       if (window.getSelection) {
@@ -85,16 +96,17 @@ Editor.prototype = {
    * @param {!KeyboardEvent} e The keyboard event that we're responding to.
    */
   update: function (e) {
+    // If we're not focused, focus.
+    this.editor_.focus();
     if (window.getSelection) {
       var selection = window.getSelection();
       var range = selection.getRangeAt(0);
       range.insertNode(document.createTextNode('{{ CARETMARKER }}'));
     }
 
-    var text = this.value;
-    this.updateCount_(text);
-    this.editor_.innerHTML = this.processText_(text);
+    this.editor_.innerHTML = this.processText_(this.value);
     this.resetCaret_();
+    this.updateCount_(this.value);
   },
 
   /**
@@ -105,8 +117,11 @@ Editor.prototype = {
    */
   updateCount_: function (text) {
     var cur = text.replace(/^---\s[\S\s]+?\s---\s/, '');
-    this.wordcount_.innerText = cur.split(/ /).length;
     this.charcount_.innerText = cur.split('').length;
+    if (this.charcount_.innerText === "0") 
+      this.wordcount_.innerText = '0';
+    else
+      this.wordcount_.innerText = cur.split(/ /).length;
   },
 
   /**
@@ -117,6 +132,9 @@ Editor.prototype = {
    * @private
    */
   processText_: function (text) {
+    // Things are simpler if text ends with a newline.
+    if (text.match(/\S$/))
+      text += "\n";
     var replacement = [
       // & and < and > => &amp; and &lt; and &gt;
       [/\&/gi, '&amp;'],
@@ -136,6 +154,9 @@ Editor.prototype = {
 
       // `code` => <code>`italic`</code>
       [/(^|[\s\[])`([^\`]+?)`(?=$|[\s\.;:<,\]])/gi, '$1<code>&#x60;$2&#x60;</code>'],
+
+      // Leading whitespace === teh awesome!
+      [/\n/g, '<br>'],
     ];
     for (var i = 0; i < replacement.length; i++)
       text = text.replace(replacement[i][0], replacement[i][1]);
@@ -154,16 +175,22 @@ Editor.prototype = {
     range.setStart(caret, 0);
 
     var selection = window.getSelection();
-    range.collapse(false);
     range.deleteContents();
+    range.collapse(false);
     selection.removeAllRanges();
     selection.addRange(range);
   },
 
   display: function () {
     this.editor_.parentNode.classList.add('active');
+    this.timer_ = setInterval((function () {
+      if (this.persistanceDelegate)
+        this.persistanceDelegate(this.editor_.innerText);
+    }).bind(this), 5000);
   },
   hide: function () {
+    this.editor_.blur();
     this.editor_.parentNode.classList.remove('active');
+    clearInterval(this.timer_);
   },
 }

@@ -1,11 +1,73 @@
-#listsection {
+#filelist {
+  padding: 0;
+  margin: 0; 
+  height: 100%;
+}
+#filelist li {
+  float: left;
+  list-style: none inside;
+  padding: 0;
+  width: 20%;
+  height: -webkit-calc(100% / 6);
+  box-sizing: border-box;
+  text-align: center;
+  z-index: 1;
+  vertical-align: middle;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-pack: center;
+
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-pack: center;
+
+  display: box;
+  box-orient: vertical;
+  box-pack: center;
+}
+#filelist li a {
+  font: 4em Open Sans, Sans-Serif; 
+  font-weight: 800;
+  text-decoration: none;
+  display: inline-block;
+  margin: 0;
+  width: 100%;
+  position: relative;
+
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  box-flex: 1;
+}
+#filelist li span {
   position: absolute;
-  left: 0;
   top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  -webkit-transform: translate(100%,100%);
+  background: url(../img/x.png) center center no-repeat;
+  color: transparent;
+  font-size: 0;
 }
-#listsection.active {
-  -webkit-transform: translate(0,0);
+#filelist li a:focus,
+#filelist li a:hover {
+  z-index: 2;
+}
+
+.light #filelist li a {
+  color: #586E75;
+}
+.light #filelist li a:hover,
+.light #filelist li a:focus {
+  background: #EEE8D5;
+}
+.light #filelist li a {
+  opacity: 0.5;
+}
+.light #filelist li a.exists {
+  opacity: 1;
+}
+.light #filelist li a.today {
+  opacity: 1;
+  color: green;
 }
