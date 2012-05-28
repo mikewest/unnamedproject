@@ -158,5 +158,12 @@ Editor.prototype = {
     range.deleteContents();
     selection.removeAllRanges();
     selection.addRange(range);
-  }
+  },
+
+  display: function () {
+    this.editor_.parentNode.classList.add('active');
+  },
+  hide: function () {
+    this.editor_.parentNode.classList.remove('active');
+  },
 }

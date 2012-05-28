@@ -37,5 +37,12 @@ ListView.prototype = {
         html[html.length] = '<li><a href="' + strcur + '.markdown">' + strcur + '</a></li>';
     }
     this.list_.innerHTML = html.join('');
-  }
+  },
+
+  display: function () {
+    this.list_.parentNode.classList.add('active');
+  },
+  hide: function () {
+    this.list_.parentNode.classList.remove('active');
+  },
 };
