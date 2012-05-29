@@ -20,6 +20,9 @@
       module("Text Processing", {
         setup: function () {
           this.editor_ = new Editor('editor');
+          this.editor_.testProcessText_ = function (text) {
+            return this.processText_(text).replace(/^<pre>/, '').replace(/<br><\/pre>$/, '');
+          };
         },
         teardown: function () {
           this.editor_ = null;
@@ -27,13 +30,13 @@
       });
       test("Replace & and < and >.", function () {
         equal(
-          this.editor_.processText_("& &amp;"),
-          "<pre>&amp; &amp;amp;</pre>",
+          this.editor_.testProcessText_("& &amp;"),
+          "&amp; &amp;amp;",
           "& is correctly replaced."
         );
         equal(
-          this.editor_.processText_("<this is code>"),
-          "<pre>&lt;this is code&gt;</pre>",
+          this.editor_.testProcessText_("<this is code>"),
+          "&lt;this is code&gt;",
           "< and > are correctly replaced."
         );
       });
@@ -41,80 +44,80 @@
     /* STRONG */
       test("Single-word strength.", function () {
         equal(
-          this.editor_.processText_("**strong**"),
-          "<pre><strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong></pre>",
+          this.editor_.testProcessText_("**strong**"),
+          "<strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong>",
           "**strong** => <strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong>"
         );
         equal(
-          this.editor_.processText_("[**strong**]"),
-          "<pre>[<strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong>]</pre>",
+          this.editor_.testProcessText_("[**strong**]"),
+          "[<strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong>]",
           "[**strong**] => <strong>[&#x2a;&#x2a;strong&#x2a;&#x2a;]</strong>"
         );
         equal(
-          this.editor_.processText_("first **strong**"),
-          "<pre>first <strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong></pre>",
+          this.editor_.testProcessText_("first **strong**"),
+          "first <strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong>",
           "first **strong** => <strong>first &#x2a;&#x2a;strong&#x2a;&#x2a;</strong>"
         );
         equal(
-          this.editor_.processText_("**strong** last"),
-          "<pre><strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong> last</pre>",
+          this.editor_.testProcessText_("**strong** last"),
+          "<strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong> last",
           "**strong** last => <strong>&#x2a;&#x2a;strong&#x2a;&#x2a; last</strong>"
         );
         equal(
-          this.editor_.processText_("sentence **strong**."),
-          "<pre>sentence <strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong>.</pre>",
+          this.editor_.testProcessText_("sentence **strong**."),
+          "sentence <strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong>.",
           "sentence **strong**. => <strong>sentence &#x2a;&#x2a;strong&#x2a;&#x2a;.</strong>"
         );
         equal(
-          this.editor_.processText_("sentence **strong**,"),
-          "<pre>sentence <strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong>,</pre>",
+          this.editor_.testProcessText_("sentence **strong**,"),
+          "sentence <strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong>,",
           "sentence **strong**, => <strong>sentence &#x2a;&#x2a;strong&#x2a;&#x2a;,</strong>"
         );
         equal(
-          this.editor_.processText_("sentence **strong**;"),
-          "<pre>sentence <strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong>;</pre>",
+          this.editor_.testProcessText_("sentence **strong**;"),
+          "sentence <strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong>;",
           "sentence **strong**; => <strong>sentence &#x2a;&#x2a;strong&#x2a;&#x2a;;</strong>"
         );
         equal(
-          this.editor_.processText_("sentence **strong**:"),
-          "<pre>sentence <strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong>:</pre>",
+          this.editor_.testProcessText_("sentence **strong**:"),
+          "sentence <strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong>:",
           "sentence **strong**: => <strong>sentence &#x2a;&#x2a;strong&#x2a;&#x2a;:</strong>"
         );
         equal(
-          this.editor_.processText_("**strong** **also**"),
-          "<pre><strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong> <strong>&#x2a;&#x2a;also&#x2a;&#x2a;</strong></pre>",
+          this.editor_.testProcessText_("**strong** **also**"),
+          "<strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong> <strong>&#x2a;&#x2a;also&#x2a;&#x2a;</strong>",
           "**strong** **strong** => <strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong> <strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong>"
         );
         equal(
-          this.editor_.processText_("**ita**lic**"),
-          "<pre><strong>&#x2a;&#x2a;ita**lic&#x2a;&#x2a;</strong></pre>",
+          this.editor_.testProcessText_("**ita**lic**"),
+          "<strong>&#x2a;&#x2a;ita**lic&#x2a;&#x2a;</strong>",
           "**ita**lic** => <strong>&#x2a;&#x2a;ita**lic&#x2a;&#x2a;</strong>"
         );
         equal(
-          this.editor_.processText_("**ita**lic** and **also**"),
-          "<pre><strong>&#x2a;&#x2a;ita**lic&#x2a;&#x2a;</strong> and <strong>&#x2a;&#x2a;also&#x2a;&#x2a;</strong></pre>",
+          this.editor_.testProcessText_("**ita**lic** and **also**"),
+          "<strong>&#x2a;&#x2a;ita**lic&#x2a;&#x2a;</strong> and <strong>&#x2a;&#x2a;also&#x2a;&#x2a;</strong>",
           "**ita**lic** and **also** => <strong>&#x2a;&#x2a;ita**lic&#x2a;&#x2a;</strong> and <strong>&#x2a;&#x2a;also&#x2a;&#x2a;</strong>"
         );
         equal(
-          this.editor_.processText_("**ita**lic**text**is**hard**to**parse**"),
-          "<pre><strong>&#x2a;&#x2a;ita**lic**text**is**hard**to**parse&#x2a;&#x2a;</strong></pre>",
+          this.editor_.testProcessText_("**ita**lic**text**is**hard**to**parse**"),
+          "<strong>&#x2a;&#x2a;ita**lic**text**is**hard**to**parse&#x2a;&#x2a;</strong>",
           "**ita**lic**text**is**hard**to**parse** => <strong>&#x2a;&#x2a;ita**lic**text**is**hard**to**parse&#x2a;&#x2a;</strong>"
         );
         equal(
-          this.editor_.processText_("not**strong**text"),
-          "<pre>not**strong**text</pre>",
+          this.editor_.testProcessText_("not**strong**text"),
+          "not**strong**text",
           "not**strong**text => not**strong**text"
         );
       });
       test("Multiple-word strong.", function () {
         equal(
-          this.editor_.processText_("**strong text**"),
-          "<pre><strong>&#x2a;&#x2a;strong text&#x2a;&#x2a;</strong></pre>",
+          this.editor_.testProcessText_("**strong text**"),
+          "<strong>&#x2a;&#x2a;strong text&#x2a;&#x2a;</strong>",
           "_strong text_ => <strong>&#x2a;&#x2a;strong text&#x2a;&#x2a;</strong>"
         );
         equal(
-          this.editor_.processText_("**str**ong te**xt**"),
-          "<pre><strong>&#x2a;&#x2a;str**ong te**xt&#x2a;&#x2a;</strong></pre>",
+          this.editor_.testProcessText_("**str**ong te**xt**"),
+          "<strong>&#x2a;&#x2a;str**ong te**xt&#x2a;&#x2a;</strong>",
           "**str**ong te**xt** => <strong>&#x2a;&#x2a;str**ong te*xt&#x2a;&#x2a;</strong>"
         );
       });
@@ -122,85 +125,85 @@
     /* EM */
       test("Single-word Emphasis.", function () {
         equal(
-          this.editor_.processText_("_italic_"),
-          "<pre><em>&#x5f;italic&#x5f;</em></pre>",
+          this.editor_.testProcessText_("_italic_"),
+          "<em>&#x5f;italic&#x5f;</em>",
           "_italic_ => <em>&#x5f;italic&#x5f;</em>"
         );
         equal(
-          this.editor_.processText_("[_italic_]"),
-          "<pre>[<em>&#x5f;italic&#x5f;</em>]</pre>",
+          this.editor_.testProcessText_("[_italic_]"),
+          "[<em>&#x5f;italic&#x5f;</em>]",
           "[_italic_] => [<em>&#x5f;italic&#x5f;</em>]"
         );
         equal(
-          this.editor_.processText_("first _italic_"),
-          "<pre>first <em>&#x5f;italic&#x5f;</em></pre>",
+          this.editor_.testProcessText_("first _italic_"),
+          "first <em>&#x5f;italic&#x5f;</em>",
           "first _italic_ => first <em>&#x5f;italic&#x5f;</em>"
         );
         equal(
-          this.editor_.processText_("sentence _italic_."),
-          "<pre>sentence <em>&#x5f;italic&#x5f;</em>.</pre>",
+          this.editor_.testProcessText_("sentence _italic_."),
+          "sentence <em>&#x5f;italic&#x5f;</em>.",
           "sentence _italic_. => sentence <em>&#x5f;italic&#x5f;.</em>"
         );
         equal(
-          this.editor_.processText_("sentence _italic_,"),
-          "<pre>sentence <em>&#x5f;italic&#x5f;</em>,</pre>",
+          this.editor_.testProcessText_("sentence _italic_,"),
+          "sentence <em>&#x5f;italic&#x5f;</em>,",
           "sentence _italic_, => sentence <em>&#x5f;italic&#x5f;,</em>"
         );
         equal(
-          this.editor_.processText_("sentence _italic_;"),
-          "<pre>sentence <em>&#x5f;italic&#x5f;</em>;</pre>",
+          this.editor_.testProcessText_("sentence _italic_;"),
+          "sentence <em>&#x5f;italic&#x5f;</em>;",
           "sentence _italic_; => sentence <em>&#x5f;italic&#x5f;;</em>"
         );
         equal(
-          this.editor_.processText_("sentence _italic_:"),
-          "<pre>sentence <em>&#x5f;italic&#x5f;</em>:</pre>",
+          this.editor_.testProcessText_("sentence _italic_:"),
+          "sentence <em>&#x5f;italic&#x5f;</em>:",
           "sentence _italic_: => sentence <em>&#x5f;italic&#x5f;:</em>"
         );
         equal(
-          this.editor_.processText_("caret _italic_{{ CARETMARKER }}"),
-          "<pre>caret <em>&#x5f;italic&#x5f;</em><mark id=\"caretmarker\"></mark></pre>",
+          this.editor_.testProcessText_("caret _italic_{{ CARETMARKER }}"),
+          "caret <em>&#x5f;italic&#x5f;</em><mark id=\"caretmarker\"></mark>",
           "caret _italic_| => caret _italic_<mark id=\"caretmarker\"></mark>"
         );
         equal(
-          this.editor_.processText_("_italic_ last"),
-          "<pre><em>&#x5f;italic&#x5f;</em> last</pre>",
+          this.editor_.testProcessText_("_italic_ last"),
+          "<em>&#x5f;italic&#x5f;</em> last",
           "_italic_ last => <em>&#x5f;italic&#x5f; last</em>"
         );
         equal(
-          this.editor_.processText_("_italic_ _also_"),
-          "<pre><em>&#x5f;italic&#x5f;</em> <em>&#x5f;also&#x5f;</em></pre>",
+          this.editor_.testProcessText_("_italic_ _also_"),
+          "<em>&#x5f;italic&#x5f;</em> <em>&#x5f;also&#x5f;</em>",
           "_italic_ _italic_ => <em>&#x5f;italic&#x5f;</em> <em>&#x5f;italic&#x5f;</em>"
         );
         equal(
-          this.editor_.processText_("_ita_lic_"),
-          "<pre><em>&#x5f;ita_lic&#x5f;</em></pre>",
+          this.editor_.testProcessText_("_ita_lic_"),
+          "<em>&#x5f;ita_lic&#x5f;</em>",
           "_ita_lic_ => <em>&#x5f;ita_lic&#x5f;</em>"
         );
         equal(
-          this.editor_.processText_("_ita_lic_ and _also_"),
-          "<pre><em>&#x5f;ita_lic&#x5f;</em> and <em>&#x5f;also&#x5f;</em></pre>",
+          this.editor_.testProcessText_("_ita_lic_ and _also_"),
+          "<em>&#x5f;ita_lic&#x5f;</em> and <em>&#x5f;also&#x5f;</em>",
           "_ita_lic_ and _also_ => <em>&#x5f;ita_lic&#x5f;</em> and <em>&#x5f;also&#x5f;</em>"
         );
         equal(
-          this.editor_.processText_("_ita_lic_text_is_hard_to_parse_"),
-          "<pre><em>&#x5f;ita_lic_text_is_hard_to_parse&#x5f;</em></pre>",
+          this.editor_.testProcessText_("_ita_lic_text_is_hard_to_parse_"),
+          "<em>&#x5f;ita_lic_text_is_hard_to_parse&#x5f;</em>",
           "_ita_lic_text_is_hard_to_parse_ => <em>&#x5f;ita_lic_text_is_hard_to_parse&#x5f;</em>"
         );
         equal(
-          this.editor_.processText_("not_italic_text"),
-          "<pre>not_italic_text</pre>",
+          this.editor_.testProcessText_("not_italic_text"),
+          "not_italic_text",
           "not_italic_text => not_italic_text"
         );
       });
       test("Multiple-word emphasis.", function () {
         equal(
-          this.editor_.processText_("_italic text_"),
-          "<pre><em>&#x5f;italic text&#x5f;</em></pre>",
+          this.editor_.testProcessText_("_italic text_"),
+          "<em>&#x5f;italic text&#x5f;</em>",
           "_italic text_ => <em>&#x5f;italic text&#x5f;</em>"
         );
         equal(
-          this.editor_.processText_("_ita_lic te_xt_"),
-          "<pre><em>&#x5f;ita_lic te_xt&#x5f;</em></pre>",
+          this.editor_.testProcessText_("_ita_lic te_xt_"),
+          "<em>&#x5f;ita_lic te_xt&#x5f;</em>",
           "_ita_lic te_xt_ => <em>&#x5f;ita_lic te_xt&#x5f;</em>"
         );
       });
@@ -208,64 +211,92 @@
     /** CODE **/
       test("Single-word code.", function () {
         equal(
-          this.editor_.processText_("`code`"),
-          "<pre><code>&#x60;code&#x60;</code></pre>",
+          this.editor_.testProcessText_("`code`"),
+          "<code>&#x60;code&#x60;</code>",
           "`code` => <code>&#x60;code&#x60;</code>"
         );
         equal(
-          this.editor_.processText_("[`code`][]"),
-          "<pre>[<code>&#x60;code&#x60;</code>][]</pre>",
+          this.editor_.testProcessText_("[`code`][]"),
+          "[<code>&#x60;code&#x60;</code>][]",
           "[`code`][] => [<code>&#x60;code&#x60;</code>][]"
         );
         equal(
-          this.editor_.processText_("first `code`"),
-          "<pre>first <code>&#x60;code&#x60;</code></pre>",
+          this.editor_.testProcessText_("first `code`"),
+          "first <code>&#x60;code&#x60;</code>",
           "first `code` => first <code>&#x60;code&#x60;</code>"
         );
         equal(
-          this.editor_.processText_("sentence `code`."),
-          "<pre>sentence <code>&#x60;code&#x60;</code>.</pre>",
+          this.editor_.testProcessText_("sentence `code`."),
+          "sentence <code>&#x60;code&#x60;</code>.",
           "sentence `code`. => sentence <code>&#x60;code&#x60;.</code>"
         );
         equal(
-          this.editor_.processText_("sentence `code`,"),
-          "<pre>sentence <code>&#x60;code&#x60;</code>,</pre>",
+          this.editor_.testProcessText_("sentence `code`,"),
+          "sentence <code>&#x60;code&#x60;</code>,",
           "sentence `code`, => sentence <code>&#x60;code&#x60;,</code>"
         );
         equal(
-          this.editor_.processText_("sentence `code`;"),
-          "<pre>sentence <code>&#x60;code&#x60;</code>;</pre>",
+          this.editor_.testProcessText_("sentence `code`;"),
+          "sentence <code>&#x60;code&#x60;</code>;",
           "sentence `code`; => sentence <code>&#x60;code&#x60;;</code>"
         );
         equal(
-          this.editor_.processText_("sentence `code`:"),
-          "<pre>sentence <code>&#x60;code&#x60;</code>:</pre>",
+          this.editor_.testProcessText_("sentence `code`:"),
+          "sentence <code>&#x60;code&#x60;</code>:",
           "sentence `code`: => sentence <code>&#x60;code&#x60;:</code>"
         );
         equal(
-          this.editor_.processText_("caret `code`{{ CARETMARKER }}"),
-          "<pre>caret <code>&#x60;code&#x60;</code><mark id=\"caretmarker\"></mark></pre>",
+          this.editor_.testProcessText_("caret `code`{{ CARETMARKER }}"),
+          "caret <code>&#x60;code&#x60;</code><mark id=\"caretmarker\"></mark>",
           "caret `code`| => caret `code`<mark id=\"caretmarker\"></mark>"
         );
         equal(
-          this.editor_.processText_("`code` last"),
-          "<pre><code>&#x60;code&#x60;</code> last</pre>",
+          this.editor_.testProcessText_("`code` last"),
+          "<code>&#x60;code&#x60;</code> last",
           "`code` last => <code>&#x60;code&#x60; last</code>"
         );
         equal(
-          this.editor_.processText_("`code` `also`"),
-          "<pre><code>&#x60;code&#x60;</code> <code>&#x60;also&#x60;</code></pre>",
+          this.editor_.testProcessText_("`code` `also`"),
+          "<code>&#x60;code&#x60;</code> <code>&#x60;also&#x60;</code>",
           "`code` `also` => <code>&#x60;code&#x60;</code> <code>&#x60;also&#x60;</code>"
         );
       });
       test("Multiple-word code.", function () {
         equal(
-          this.editor_.processText_("`code text`"),
-          "<pre><code>&#x60;code text&#x60;</code></pre>",
+          this.editor_.testProcessText_("`code text`"),
+          "<code>&#x60;code text&#x60;</code>",
           "`code text` => <code>&#x60;code text&#x60;</code>"
         );
       });
 
+    /** HEADINGS **/
+      test("One-line headings.", function () {
+        equal(
+          this.editor_.testProcessText_("# Heading 1"),
+          "# <strong>Heading 1</strong>",
+          "# Heading 1 => # <strong>Heading 1</strong>"
+        );
+        equal(
+          this.editor_.testProcessText_("## Heading 2"),
+          "## <strong>Heading 2</strong>",
+          "## Heading 2 => ## <strong>Heading 2</strong>"
+        );
+        equal(
+          this.editor_.testProcessText_("This is # not a heading"),
+          "This is # not a heading",
+          "This is # not a heading => This is # not a heading"
+        );
+        equal(
+          this.editor_.testProcessText_("This is\n# a heading"),
+          "This is<br># <strong>a heading</strong>",
+          "This is\n# a heading => This is<br># <strong>a heading</strong>"
+        );
+        equal(
+          this.editor_.testProcessText_("# Heading 1\n## Heading 2"),
+          "# <strong>Heading 1</strong><br>## <strong>Heading 2</strong>",
+          "## Heading 2 => ## <strong>Heading 2</strong>"
+        );
+      });
     </script>
   </body>
 </html>

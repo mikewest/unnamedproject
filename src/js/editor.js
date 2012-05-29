@@ -155,6 +155,8 @@ Editor.prototype = {
       // `code` => <code>`italic`</code>
       [/(^|[\s\[])`([^\`]+?)`(?=$|[\s\.;:<,\]])/gi, '$1<code>&#x60;$2&#x60;</code>'],
 
+      // # Header => # <strong>Header</strong>
+      [/(^|\n)(#+\s+)([^\n]+)/gi, '$1$2<strong>$3</strong>'],
       // Leading whitespace === teh awesome!
       [/\n/g, '<br>'],
     ];
