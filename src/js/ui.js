@@ -47,13 +47,25 @@ UI.prototype = {
     else if (e.state)
       this.showEditor_(e.state);
     else
-      this.showList_();
+      this.main_();
   },
 
-  persistDocument_: function(text) {
+  persistDocument_: function(text, download) {
     if (this.activeDocument_) {
       this.storage_.write(this.activeDocument_, text, (function () {
         this.storage_.saved_ = new Date();
+        if (download) {
+          this.storage_.getFileURL(this.activeDocument_, (function (url) {
+            var a = document.createElement('a');
+            a.setAttribute('download', this.activeDocument_);
+            a.href = url;
+            var event = document.createEvent("MouseEvents");
+            event.initMouseEvent(
+              "click", true, false, a, 0, 0, 0, 0, 0
+              , false, false, false, false, 0, null);
+            return a.dispatchEvent(event); 
+          }).bind(this));
+        }
       }).bind(this));
     }
   },
@@ -63,6 +75,11 @@ UI.prototype = {
   main_: function () {
     this.listView_.hide();
     this.editor_.hide();
-    this.showList_();
+
+    var date = window.location.pathname.match(/\/(\d{4}-\d{2}-\d{2})\//);
+    if (date && date[1])
+      this.showEditor_(date[1]);
+    else
+      this.showList_();
   }
 };

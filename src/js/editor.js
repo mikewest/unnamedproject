@@ -13,7 +13,14 @@ var Editor = function(editorID) {
 
   // Setup event listeners.
   this.editor_.addEventListener('keydown', this.preprocessKeystroke_.bind(this));
-  this.editor_.addEventListener('keyup', this.update.bind(this));
+  this.editor_.addEventListener('keyup', this.setNeedsUpdate_.bind(this));
+
+  var timer = (function () {
+    window.webkitRequestAnimationFrame(timer);
+    if (this.needsUpdate_)
+      this.update();
+  }).bind(this);
+  window.webkitRequestAnimationFrame(timer);
 
   // Kick things off by focusing on the editor and running a style update.
   this.editor_.focus();
@@ -55,6 +62,18 @@ Editor.prototype = {
     return this.editor_.innerText;
   },
 
+  setNeedsUpdate_: function (e) {
+    console.log(e.keyCode);
+    if (e.keyCode === 16 || // Shift
+        e.keyCode === 17 || // Ctrl
+        e.keyCode === 18 || // Alt
+        e.keyCode === 27 || // Esc
+        e.keyCode === 93 || // Command
+        (e.keyCode >= 37 && e.keyCode <= 40)) // Arrow keys
+      return;
+    this.needsUpdate_ = true;
+  },
+
   /**
    * One or two characters cause issues; this function triggers on `keydown`
    * in order to work around them.
@@ -62,23 +81,52 @@ Editor.prototype = {
    * @param {!KeyboardEvent} e The keyboard event that we're responding to.
    */
   preprocessKeystroke_: function (e) {
+    if (e.keyCode === 83 && e.metaKey) { // command-s
+      e.preventDefault();
+      e.stopPropagation();
+      if (this.persistanceDelegate)
+        this.persistanceDelegate(this.editor_.innerText, true);
+      return;
+    }
     if (e.keyCode === 8) { // BACKSPACE
       if (window.getSelection) {
         var selection = window.getSelection();
         var range = selection.getRangeAt(0);
+        // Don't delete our way out of the root element.
         if (!range.endOffset && !range.startOffset &&
             range.startContainer === this.editor_) {
           e.preventDefault();
           e.stopPropagation();
         }
+        // Don't get stuck on the cursor.
+        if (range.startContainer.id === 'caretmarker') {
+          range.setStartBefore(range.startContainer);
+          range.collapse(true);
+          selection.removeAllRanges();
+          selection.addRange(range);
+        }
       }
-    } else if (e.keyCode === 13) { // ENTER
+      return;
+    }
+    if (e.keyCode === 9) { // TAB
       e.preventDefault();
       e.stopPropagation();
       if (window.getSelection) {
         var selection = window.getSelection();
         var range = selection.getRangeAt(0);
-        range.insertNode(document.createTextNode('\n'));
+        range.insertNode(document.createTextNode('  '));
+        range.collapse(false);
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
+    }
+    if (e.keyCode === 13) { // ENTER
+      e.preventDefault();
+      e.stopPropagation();
+      if (window.getSelection) {
+        var selection = window.getSelection();
+        var range = selection.getRangeAt(0);
+        range.insertNode(document.createElement('br'));
         range.collapse(false);
         selection.removeAllRanges();
         selection.addRange(range);
@@ -96,6 +144,8 @@ Editor.prototype = {
    * @param {!KeyboardEvent} e The keyboard event that we're responding to.
    */
   update: function (e) {
+    this.needsUpdate_ = false;
+
     // If we're not focused, focus.
     this.editor_.focus();
     if (window.getSelection) {
@@ -174,11 +224,12 @@ Editor.prototype = {
   resetCaret_: function () {
     var caret = document.querySelector('#caretmarker');
     var range = document.createRange();
-    range.setStart(caret, 0);
-
-    var selection = window.getSelection();
+    range.setStartBefore(caret);
+    range.setEndAfter(caret);
     range.deleteContents();
     range.collapse(false);
+
+    var selection = window.getSelection();
     selection.removeAllRanges();
     selection.addRange(range);
   },

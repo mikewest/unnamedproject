@@ -33,14 +33,16 @@
     <script src="./src/js/editor.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
-        var c = new Editor('text');
+        window.e = new Editor('text');
       });
     </script>
   </head>
   <body class="light">
     <aside>Counts: <output id="wordcount">0</output>&nbsp;words <output id="charcount">0</output>&nbsp;chars</aside>
     <div id="text" class="editor" contenteditable="true"><pre>
----
+This is some text.
+    </pre></div>
+<!--
 layout: post
 title: "Chrome connects to three random domains at startup."
 tags:
@@ -56,7 +58,6 @@ Teaser:
    seen a few theories about why exactly this happens that brush up against the
    nefarious. The true rationale is incredibly mundane: hopefully this short
    summary will clear things up."
----
 When you start Chrome, it attempts to connect to three random domains like `http://aghepodlln/` or `http://lkhjasdnpr/`. I've seen a [few][1] [theories][2] about why exactly this happens that brush up against the nefarious. The true rationale is incredibly mundane: hopefully this short summary will clear things up.
 
 The goal of the requests is to determine if you're currently on a network that intercepts and redirects requests for nonexistent hostnames. For example, it's not at all uncommon for ISP to transparently redirect failed DNS lookups in order to convert requests like `http://text/` into requests for `http://your.helpful.isp/search?q=text`. Leaving aside a discussion of the rightness or wrongness of these "helpful" activities, this behavior causes problems for Chrome. Specifically, it breaks some heuristics the Omnibox uses to determine whether a user means to _search_ for a specific term, or to visit a non-standard domain name.
@@ -89,5 +90,6 @@ So there you have it. Chrome makes three requests to random domains just after s
 
 [9]: http://crbug.com/18942
     </pre></div>
+-->
   </body>
 </html>

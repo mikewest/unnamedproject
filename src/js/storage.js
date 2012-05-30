@@ -101,6 +101,16 @@ Storage.prototype = {
         this.onFSError_.bind(this));
   },
 
+  getFileURL: function (name, callback) {
+    this.docroot_.getFile(
+        name,
+        {create:false},
+        (function (fileEntry) {
+          callback(fileEntry.toURL());
+        }).bind(this),
+        this.onFSError_.bind(this));
+  },
+
   /**
    * Opens (and creates if necessary) a document, writes |text| into it, and
    * calls `callback` when finished.
