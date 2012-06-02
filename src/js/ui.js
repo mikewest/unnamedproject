@@ -4,7 +4,7 @@ var UI = function (storage) {
 
   this.editor_ = new Editor('text');
   this.editor_.onpersist = this.persistDocument_.bind(this);
-  this.editor_.onclose = this.showList_.bind(this);
+  this.editor_.onclose = this.navigateFromEditor_.bind(this);
 
   this.storage_ = new Storage(this.storageInitalized_.bind(this));
 };
@@ -18,6 +18,11 @@ UI.prototype = {
   navigateFromList_: function(date) {
     history.pushState(date, date, "/" + date + "/");
     this.showEditor_(date);
+  },
+
+  navigateFromEditor_: function() {
+    history.pushState('/', '/', '/');
+    this.showList_();
   },
 
   showEditor_: function (date) {
@@ -43,7 +48,7 @@ UI.prototype = {
   },
 
   popState_: function (e) {
-    if (e.state === "list")
+    if (e.state === "/")
       this.showList_();
     else if (e.state)
       this.showEditor_(e.state);

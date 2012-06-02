@@ -4,30 +4,19 @@
   height: 100%;
 }
 #filelist li {
-  float: left;
+  display: inline-block;
   list-style: none inside;
   padding: 0;
   width: 20%;
-  height: -webkit-calc(100% / 6);
+  height: 16.666%;
+  line-height: 16.666%;
   box-sizing: border-box;
   text-align: center;
   z-index: 1;
   vertical-align: middle;
-
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-box-pack: center;
-
-  display: -moz-box;
-  -moz-box-orient: vertical;
-  -moz-box-pack: center;
-
-  display: box;
-  box-orient: vertical;
-  box-pack: center;
 }
 #filelist li a {
-  font: 4em Open Sans, Sans-Serif; 
+  font: 4em/1.5 Open Sans, Sans-Serif; 
   font-weight: 800;
   text-decoration: none;
   display: inline-block;
@@ -45,7 +34,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: url(../img/x.png) center center no-repeat;
+  background: url(/img/x.png) center center no-repeat;
   color: transparent;
   font-size: 0;
 }

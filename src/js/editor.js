@@ -15,6 +15,19 @@ var Editor = function(editorID) {
   this.editor_.addEventListener('keydown', this.preprocessKeystroke_.bind(this));
   this.editor_.addEventListener('keyup', this.setNeedsUpdate_.bind(this));
 
+  document.getElementById('close').addEventListener('click', (function () {
+    this.onclose();
+  }).bind(this));
+  document.getElementById('download').addEventListener('click', (function () {
+    this.onpersist(this.editor_.innerText, true);
+  }).bind(this));
+  document.getElementById('fullscreen').addEventListener('click', (function () {
+    if (document.body.webkitRequestFullScreen)
+      document.body.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+    if (document.body.mozRequestFullScreen)
+      document.body.mozRequestFullScreen();
+  }).bind(this));
+
   var timer = (function () {
     window.webkitRequestAnimationFrame(timer);
     if (this.needsUpdate_)

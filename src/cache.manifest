@@ -1,0 +1,17 @@
+CACHE MANIFEST
+# 2012-06-02v1
+
+/css/base.css
+/css/editor.css
+/css/list.css
+
+/js/storage.js
+/js/editor.js
+/js/listview.js
+/js/ui.js
+/js/init.js
+
+/img/x.png
+/img/cross.png
+/img/download.png
+/img/expand.png

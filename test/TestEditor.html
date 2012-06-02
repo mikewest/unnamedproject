@@ -45,63 +45,63 @@
       test("Single-word strength.", function () {
         equal(
           this.editor_.testProcessText_("**strong**"),
-          "<strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong>",
-          "**strong** => <strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong>"
+          "<strong><s>&#x2a;&#x2a;</s>strong<s>&#x2a;&#x2a;</s></strong>",
+          "**strong** => <strong><s>&#x2a;&#x2a;</s>strong<s>&#x2a;&#x2a;</s></strong>"
         );
         equal(
           this.editor_.testProcessText_("[**strong**]"),
-          "[<strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong>]",
-          "[**strong**] => <strong>[&#x2a;&#x2a;strong&#x2a;&#x2a;]</strong>"
+          "[<strong><s>&#x2a;&#x2a;</s>strong<s>&#x2a;&#x2a;</s></strong>]",
+          "[**strong**] => <strong>[<s>&#x2a;&#x2a;</s>strong<s>&#x2a;&#x2a;</s>]</strong>"
         );
         equal(
           this.editor_.testProcessText_("first **strong**"),
-          "first <strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong>",
-          "first **strong** => <strong>first &#x2a;&#x2a;strong&#x2a;&#x2a;</strong>"
+          "first <strong><s>&#x2a;&#x2a;</s>strong<s>&#x2a;&#x2a;</s></strong>",
+          "first **strong** => <strong>first <s>&#x2a;&#x2a;</s>strong<s>&#x2a;&#x2a;</s></strong>"
         );
         equal(
           this.editor_.testProcessText_("**strong** last"),
-          "<strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong> last",
-          "**strong** last => <strong>&#x2a;&#x2a;strong&#x2a;&#x2a; last</strong>"
+          "<strong><s>&#x2a;&#x2a;</s>strong<s>&#x2a;&#x2a;</s></strong> last",
+          "**strong** last => <strong><s>&#x2a;&#x2a;</s>strong<s>&#x2a;&#x2a;</s> last</strong>"
         );
         equal(
           this.editor_.testProcessText_("sentence **strong**."),
-          "sentence <strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong>.",
-          "sentence **strong**. => <strong>sentence &#x2a;&#x2a;strong&#x2a;&#x2a;.</strong>"
+          "sentence <strong><s>&#x2a;&#x2a;</s>strong<s>&#x2a;&#x2a;</s></strong>.",
+          "sentence **strong**. => <strong>sentence <s>&#x2a;&#x2a;</s>strong<s>&#x2a;&#x2a;</s>.</strong>"
         );
         equal(
           this.editor_.testProcessText_("sentence **strong**,"),
-          "sentence <strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong>,",
-          "sentence **strong**, => <strong>sentence &#x2a;&#x2a;strong&#x2a;&#x2a;,</strong>"
+          "sentence <strong><s>&#x2a;&#x2a;</s>strong<s>&#x2a;&#x2a;</s></strong>,",
+          "sentence **strong**, => <strong>sentence <s>&#x2a;&#x2a;</s>strong<s>&#x2a;&#x2a;</s>,</strong>"
         );
         equal(
           this.editor_.testProcessText_("sentence **strong**;"),
-          "sentence <strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong>;",
-          "sentence **strong**; => <strong>sentence &#x2a;&#x2a;strong&#x2a;&#x2a;;</strong>"
+          "sentence <strong><s>&#x2a;&#x2a;</s>strong<s>&#x2a;&#x2a;</s></strong>;",
+          "sentence **strong**; => <strong>sentence <s>&#x2a;&#x2a;</s>strong<s>&#x2a;&#x2a;</s>;</strong>"
         );
         equal(
           this.editor_.testProcessText_("sentence **strong**:"),
-          "sentence <strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong>:",
-          "sentence **strong**: => <strong>sentence &#x2a;&#x2a;strong&#x2a;&#x2a;:</strong>"
+          "sentence <strong><s>&#x2a;&#x2a;</s>strong<s>&#x2a;&#x2a;</s></strong>:",
+          "sentence **strong**: => <strong>sentence <s>&#x2a;&#x2a;</s>strong<s>&#x2a;&#x2a;</s>:</strong>"
         );
         equal(
           this.editor_.testProcessText_("**strong** **also**"),
-          "<strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong> <strong>&#x2a;&#x2a;also&#x2a;&#x2a;</strong>",
-          "**strong** **strong** => <strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong> <strong>&#x2a;&#x2a;strong&#x2a;&#x2a;</strong>"
+          "<strong><s>&#x2a;&#x2a;</s>strong<s>&#x2a;&#x2a;</s></strong> <strong><s>&#x2a;&#x2a;</s>also<s>&#x2a;&#x2a;</s></strong>",
+          "**strong** **strong** => <strong><s>&#x2a;&#x2a;</s>strong<s>&#x2a;&#x2a;</s></strong> <strong><s>&#x2a;&#x2a;</s>strong<s>&#x2a;&#x2a;</s></strong>"
         );
         equal(
           this.editor_.testProcessText_("**ita**lic**"),
-          "<strong>&#x2a;&#x2a;ita**lic&#x2a;&#x2a;</strong>",
-          "**ita**lic** => <strong>&#x2a;&#x2a;ita**lic&#x2a;&#x2a;</strong>"
+          "<strong><s>&#x2a;&#x2a;</s>ita**lic<s>&#x2a;&#x2a;</s></strong>",
+          "**ita**lic** => <strong><s>&#x2a;&#x2a;</s>ita**lic<s>&#x2a;&#x2a;</s></strong>"
         );
         equal(
           this.editor_.testProcessText_("**ita**lic** and **also**"),
-          "<strong>&#x2a;&#x2a;ita**lic&#x2a;&#x2a;</strong> and <strong>&#x2a;&#x2a;also&#x2a;&#x2a;</strong>",
-          "**ita**lic** and **also** => <strong>&#x2a;&#x2a;ita**lic&#x2a;&#x2a;</strong> and <strong>&#x2a;&#x2a;also&#x2a;&#x2a;</strong>"
+          "<strong><s>&#x2a;&#x2a;</s>ita**lic<s>&#x2a;&#x2a;</s></strong> and <strong><s>&#x2a;&#x2a;</s>also<s>&#x2a;&#x2a;</s></strong>",
+          "**ita**lic** and **also** => <strong><s>&#x2a;&#x2a;</s>ita**lic<s>&#x2a;&#x2a;</s></strong> and <strong><s>&#x2a;&#x2a;</s>also<s>&#x2a;&#x2a;</s></strong>"
         );
         equal(
           this.editor_.testProcessText_("**ita**lic**text**is**hard**to**parse**"),
-          "<strong>&#x2a;&#x2a;ita**lic**text**is**hard**to**parse&#x2a;&#x2a;</strong>",
-          "**ita**lic**text**is**hard**to**parse** => <strong>&#x2a;&#x2a;ita**lic**text**is**hard**to**parse&#x2a;&#x2a;</strong>"
+          "<strong><s>&#x2a;&#x2a;</s>ita**lic**text**is**hard**to**parse<s>&#x2a;&#x2a;</s></strong>",
+          "**ita**lic**text**is**hard**to**parse** => <strong><s>&#x2a;&#x2a;</s>ita**lic**text**is**hard**to**parse<s>&#x2a;&#x2a;</s></strong>"
         );
         equal(
           this.editor_.testProcessText_("not**strong**text"),
@@ -112,13 +112,13 @@
       test("Multiple-word strong.", function () {
         equal(
           this.editor_.testProcessText_("**strong text**"),
-          "<strong>&#x2a;&#x2a;strong text&#x2a;&#x2a;</strong>",
-          "_strong text_ => <strong>&#x2a;&#x2a;strong text&#x2a;&#x2a;</strong>"
+          "<strong><s>&#x2a;&#x2a;</s>strong text<s>&#x2a;&#x2a;</s></strong>",
+          "_strong text_ => <strong><s>&#x2a;&#x2a;</s>strong text<s>&#x2a;&#x2a;</s></strong>"
         );
         equal(
           this.editor_.testProcessText_("**str**ong te**xt**"),
-          "<strong>&#x2a;&#x2a;str**ong te**xt&#x2a;&#x2a;</strong>",
-          "**str**ong te**xt** => <strong>&#x2a;&#x2a;str**ong te*xt&#x2a;&#x2a;</strong>"
+          "<strong><s>&#x2a;&#x2a;</s>str**ong te**xt<s>&#x2a;&#x2a;</s></strong>",
+          "**str**ong te**xt** => <strong><s>&#x2a;&#x2a;</s>str**ong te*xt<s>&#x2a;&#x2a;</s></strong>"
         );
       });
 
@@ -126,68 +126,68 @@
       test("Single-word Emphasis.", function () {
         equal(
           this.editor_.testProcessText_("_italic_"),
-          "<em>&#x5f;italic&#x5f;</em>",
-          "_italic_ => <em>&#x5f;italic&#x5f;</em>"
+          "<em><s>&#x5f;</s>italic<s>&#x5f;</s></em>",
+          "_italic_ => <em><s>&#x5f;</s>italic<s>&#x5f;</s></em>"
         );
         equal(
           this.editor_.testProcessText_("[_italic_]"),
-          "[<em>&#x5f;italic&#x5f;</em>]",
-          "[_italic_] => [<em>&#x5f;italic&#x5f;</em>]"
+          "[<em><s>&#x5f;</s>italic<s>&#x5f;</s></em>]",
+          "[_italic_] => [<em><s>&#x5f;</s>italic<s>&#x5f;</s></em>]"
         );
         equal(
           this.editor_.testProcessText_("first _italic_"),
-          "first <em>&#x5f;italic&#x5f;</em>",
-          "first _italic_ => first <em>&#x5f;italic&#x5f;</em>"
+          "first <em><s>&#x5f;</s>italic<s>&#x5f;</s></em>",
+          "first _italic_ => first <em><s>&#x5f;</s>italic<s>&#x5f;</s></em>"
         );
         equal(
           this.editor_.testProcessText_("sentence _italic_."),
-          "sentence <em>&#x5f;italic&#x5f;</em>.",
-          "sentence _italic_. => sentence <em>&#x5f;italic&#x5f;.</em>"
+          "sentence <em><s>&#x5f;</s>italic<s>&#x5f;</s></em>.",
+          "sentence _italic_. => sentence <em><s>&#x5f;</s>italic<s>&#x5f;</s>.</em>"
         );
         equal(
           this.editor_.testProcessText_("sentence _italic_,"),
-          "sentence <em>&#x5f;italic&#x5f;</em>,",
-          "sentence _italic_, => sentence <em>&#x5f;italic&#x5f;,</em>"
+          "sentence <em><s>&#x5f;</s>italic<s>&#x5f;</s></em>,",
+          "sentence _italic_, => sentence <em><s>&#x5f;</s>italic<s>&#x5f;</s>,</em>"
         );
         equal(
           this.editor_.testProcessText_("sentence _italic_;"),
-          "sentence <em>&#x5f;italic&#x5f;</em>;",
-          "sentence _italic_; => sentence <em>&#x5f;italic&#x5f;;</em>"
+          "sentence <em><s>&#x5f;</s>italic<s>&#x5f;</s></em>;",
+          "sentence _italic_; => sentence <em><s>&#x5f;</s>italic<s>&#x5f;</s>;</em>"
         );
         equal(
           this.editor_.testProcessText_("sentence _italic_:"),
-          "sentence <em>&#x5f;italic&#x5f;</em>:",
-          "sentence _italic_: => sentence <em>&#x5f;italic&#x5f;:</em>"
+          "sentence <em><s>&#x5f;</s>italic<s>&#x5f;</s></em>:",
+          "sentence _italic_: => sentence <em><s>&#x5f;</s>italic<s>&#x5f;</s>:</em>"
         );
         equal(
           this.editor_.testProcessText_("caret _italic_{{ CARETMARKER }}"),
-          "caret <em>&#x5f;italic&#x5f;</em><mark id=\"caretmarker\"></mark>",
+          "caret <em><s>&#x5f;</s>italic<s>&#x5f;</s></em><mark id=\"caretmarker\"></mark>",
           "caret _italic_| => caret _italic_<mark id=\"caretmarker\"></mark>"
         );
         equal(
           this.editor_.testProcessText_("_italic_ last"),
-          "<em>&#x5f;italic&#x5f;</em> last",
-          "_italic_ last => <em>&#x5f;italic&#x5f; last</em>"
+          "<em><s>&#x5f;</s>italic<s>&#x5f;</s></em> last",
+          "_italic_ last => <em><s>&#x5f;</s>italic<s>&#x5f;</s> last</em>"
         );
         equal(
           this.editor_.testProcessText_("_italic_ _also_"),
-          "<em>&#x5f;italic&#x5f;</em> <em>&#x5f;also&#x5f;</em>",
-          "_italic_ _italic_ => <em>&#x5f;italic&#x5f;</em> <em>&#x5f;italic&#x5f;</em>"
+          "<em><s>&#x5f;</s>italic<s>&#x5f;</s></em> <em><s>&#x5f;</s>also<s>&#x5f;</s></em>",
+          "_italic_ _italic_ => <em><s>&#x5f;</s>italic<s>&#x5f;</s></em> <em><s>&#x5f;</s>italic<s>&#x5f;</s></em>"
         );
         equal(
           this.editor_.testProcessText_("_ita_lic_"),
-          "<em>&#x5f;ita_lic&#x5f;</em>",
-          "_ita_lic_ => <em>&#x5f;ita_lic&#x5f;</em>"
+          "<em><s>&#x5f;</s>ita_lic<s>&#x5f;</s></em>",
+          "_ita_lic_ => <em><s>&#x5f;</s>ita_lic<s>&#x5f;</s></em>"
         );
         equal(
           this.editor_.testProcessText_("_ita_lic_ and _also_"),
-          "<em>&#x5f;ita_lic&#x5f;</em> and <em>&#x5f;also&#x5f;</em>",
-          "_ita_lic_ and _also_ => <em>&#x5f;ita_lic&#x5f;</em> and <em>&#x5f;also&#x5f;</em>"
+          "<em><s>&#x5f;</s>ita_lic<s>&#x5f;</s></em> and <em><s>&#x5f;</s>also<s>&#x5f;</s></em>",
+          "_ita_lic_ and _also_ => <em><s>&#x5f;</s>ita_lic<s>&#x5f;</s></em> and <em><s>&#x5f;</s>also<s>&#x5f;</s></em>"
         );
         equal(
           this.editor_.testProcessText_("_ita_lic_text_is_hard_to_parse_"),
-          "<em>&#x5f;ita_lic_text_is_hard_to_parse&#x5f;</em>",
-          "_ita_lic_text_is_hard_to_parse_ => <em>&#x5f;ita_lic_text_is_hard_to_parse&#x5f;</em>"
+          "<em><s>&#x5f;</s>ita_lic_text_is_hard_to_parse<s>&#x5f;</s></em>",
+          "_ita_lic_text_is_hard_to_parse_ => <em><s>&#x5f;</s>ita_lic_text_is_hard_to_parse<s>&#x5f;</s></em>"
         );
         equal(
           this.editor_.testProcessText_("not_italic_text"),
@@ -198,13 +198,13 @@
       test("Multiple-word emphasis.", function () {
         equal(
           this.editor_.testProcessText_("_italic text_"),
-          "<em>&#x5f;italic text&#x5f;</em>",
-          "_italic text_ => <em>&#x5f;italic text&#x5f;</em>"
+          "<em><s>&#x5f;</s>italic text<s>&#x5f;</s></em>",
+          "_italic text_ => <em><s>&#x5f;</s>italic text<s>&#x5f;</s></em>"
         );
         equal(
           this.editor_.testProcessText_("_ita_lic te_xt_"),
-          "<em>&#x5f;ita_lic te_xt&#x5f;</em>",
-          "_ita_lic te_xt_ => <em>&#x5f;ita_lic te_xt&#x5f;</em>"
+          "<em><s>&#x5f;</s>ita_lic te_xt<s>&#x5f;</s></em>",
+          "_ita_lic te_xt_ => <em><s>&#x5f;</s>ita_lic te_xt<s>&#x5f;</s></em>"
         );
       });
 
@@ -212,60 +212,60 @@
       test("Single-word code.", function () {
         equal(
           this.editor_.testProcessText_("`code`"),
-          "<code>&#x60;code&#x60;</code>",
-          "`code` => <code>&#x60;code&#x60;</code>"
+          "<code><s>&#x60;</s>code<s>&#x60;</s></code>",
+          "`code` => <code><s>&#x60;</s>code<s>&#x60;</s></code>"
         );
         equal(
           this.editor_.testProcessText_("[`code`][]"),
-          "[<code>&#x60;code&#x60;</code>][]",
-          "[`code`][] => [<code>&#x60;code&#x60;</code>][]"
+          "[<code><s>&#x60;</s>code<s>&#x60;</s></code>][]",
+          "[`code`][] => [<code><s>&#x60;</s>code<s>&#x60;</s></code>][]"
         );
         equal(
           this.editor_.testProcessText_("first `code`"),
-          "first <code>&#x60;code&#x60;</code>",
-          "first `code` => first <code>&#x60;code&#x60;</code>"
+          "first <code><s>&#x60;</s>code<s>&#x60;</s></code>",
+          "first `code` => first <code><s>&#x60;</s>code<s>&#x60;</s></code>"
         );
         equal(
           this.editor_.testProcessText_("sentence `code`."),
-          "sentence <code>&#x60;code&#x60;</code>.",
-          "sentence `code`. => sentence <code>&#x60;code&#x60;.</code>"
+          "sentence <code><s>&#x60;</s>code<s>&#x60;</s></code>.",
+          "sentence `code`. => sentence <code><s>&#x60;</s>code<s>&#x60;</s>.</code>"
         );
         equal(
           this.editor_.testProcessText_("sentence `code`,"),
-          "sentence <code>&#x60;code&#x60;</code>,",
-          "sentence `code`, => sentence <code>&#x60;code&#x60;,</code>"
+          "sentence <code><s>&#x60;</s>code<s>&#x60;</s></code>,",
+          "sentence `code`, => sentence <code><s>&#x60;</s>code<s>&#x60;</s>,</code>"
         );
         equal(
           this.editor_.testProcessText_("sentence `code`;"),
-          "sentence <code>&#x60;code&#x60;</code>;",
-          "sentence `code`; => sentence <code>&#x60;code&#x60;;</code>"
+          "sentence <code><s>&#x60;</s>code<s>&#x60;</s></code>;",
+          "sentence `code`; => sentence <code><s>&#x60;</s>code<s>&#x60;</s>;</code>"
         );
         equal(
           this.editor_.testProcessText_("sentence `code`:"),
-          "sentence <code>&#x60;code&#x60;</code>:",
-          "sentence `code`: => sentence <code>&#x60;code&#x60;:</code>"
+          "sentence <code><s>&#x60;</s>code<s>&#x60;</s></code>:",
+          "sentence `code`: => sentence <code><s>&#x60;</s>code<s>&#x60;</s>:</code>"
         );
         equal(
           this.editor_.testProcessText_("caret `code`{{ CARETMARKER }}"),
-          "caret <code>&#x60;code&#x60;</code><mark id=\"caretmarker\"></mark>",
+          "caret <code><s>&#x60;</s>code<s>&#x60;</s></code><mark id=\"caretmarker\"></mark>",
           "caret `code`| => caret `code`<mark id=\"caretmarker\"></mark>"
         );
         equal(
           this.editor_.testProcessText_("`code` last"),
-          "<code>&#x60;code&#x60;</code> last",
-          "`code` last => <code>&#x60;code&#x60; last</code>"
+          "<code><s>&#x60;</s>code<s>&#x60;</s></code> last",
+          "`code` last => <code><s>&#x60;</s>code<s>&#x60;</s> last</code>"
         );
         equal(
           this.editor_.testProcessText_("`code` `also`"),
-          "<code>&#x60;code&#x60;</code> <code>&#x60;also&#x60;</code>",
-          "`code` `also` => <code>&#x60;code&#x60;</code> <code>&#x60;also&#x60;</code>"
+          "<code><s>&#x60;</s>code<s>&#x60;</s></code> <code><s>&#x60;</s>also<s>&#x60;</s></code>",
+          "`code` `also` => <code><s>&#x60;</s>code<s>&#x60;</s></code> <code><s>&#x60;</s>also<s>&#x60;</s></code>"
         );
       });
       test("Multiple-word code.", function () {
         equal(
           this.editor_.testProcessText_("`code text`"),
-          "<code>&#x60;code text&#x60;</code>",
-          "`code text` => <code>&#x60;code text&#x60;</code>"
+          "<code><s>&#x60;</s>code text<s>&#x60;</s></code>",
+          "`code text` => <code><s>&#x60;</s>code text<s>&#x60;</s></code>"
         );
       });
 

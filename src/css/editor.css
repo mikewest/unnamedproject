@@ -2,6 +2,44 @@
   background: #EEE8D5;
 }
 
+nav {
+  position: absolute;
+  bottom: 10px;
+  left: -webkit-calc(50% - 560px);
+}
+nav button {
+  background: #002B36 url(/img/cross.png) no-repeat center center;
+  border-radius: 10px;
+  border: 0;
+  cursor: pointer;
+  display: block;
+  height: 40px;
+  margin-bottom: 1em;
+  opacity: 0.25;
+  overflow: hidden;
+  padding: 0;
+  text-indent: 40px;
+  white-space: nowrap;
+  width: 40px;
+
+  -webkit-transition: opacity 1s ease;
+  -moz-transition: opacity 1s ease;
+  transition: opacity 1s ease;
+}
+nav button:focus,
+nav button:hover {
+  opacity: 1;
+}
+#close {
+  background-image: url(/img/cross.png);
+}
+#download {
+  background-image: url(/img/download.png);
+}
+#fullscreen {
+  background-image: url(/img/expand.png);
+}
+
 .editor {
   border: 0;
   display: block;
