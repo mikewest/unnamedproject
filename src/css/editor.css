@@ -24,6 +24,12 @@
 }
 .editor strong {
 }
+.editor strong.hx {
+  text-decoration: underline;
+}
+.editor s {
+  text-decoration: none;
+}
 .editor pre {
   white-space: pre-wrap;
 }
@@ -63,6 +69,12 @@ aside {
 }
 .light .editor strong {
   color: #586E75;
+}
+.light .editor s {
+  color: #93A1A1;
+}
+.light .editor a {
+  color: #268BD2;
 }
 .light .editor::-webkit-scrollbar-track {
   background: #FDF6E3;

@@ -63,12 +63,12 @@ Editor.prototype = {
   },
 
   setNeedsUpdate_: function (e) {
-    console.log(e.keyCode);
     if (e.keyCode === 16 || // Shift
         e.keyCode === 17 || // Ctrl
         e.keyCode === 18 || // Alt
         e.keyCode === 27 || // Esc
-        e.keyCode === 93 || // Command
+        e.keyCode === 91 || // Command
+        e.keyCode === 93 || // Other command.
         (e.keyCode >= 37 && e.keyCode <= 40)) // Arrow keys
       return;
     this.needsUpdate_ = true;
@@ -146,14 +146,7 @@ Editor.prototype = {
   update: function (e) {
     this.needsUpdate_ = false;
 
-    // If we're not focused, focus.
-    this.editor_.focus();
-    if (window.getSelection) {
-      var selection = window.getSelection();
-      var range = selection.getRangeAt(0);
-      range.insertNode(document.createTextNode('{{ CARETMARKER }}'));
-    }
-
+    this.saveCaret_();
     this.editor_.innerHTML = this.processText_(this.value);
     this.resetCaret_();
     this.updateCount_(this.value);
@@ -199,20 +192,39 @@ Editor.prototype = {
       [/(^|[\s\[])_(.+?)_(?=$|[\s\.;:<,\]])/gi, '$1<em>&#x5f;$2&#x5f;</em>'],
 
       // **bold** => <strong>bold</strong>
-      [/(^|[\s\[])\*\*([^\*\s]+(?:(?:\*\*[^*\s]+)*))\*\*(?=$|[\s\.;:<,\]])/gi, '$1<strong>&#x2a;&#x2a;$2&#x2a;&#x2a;</strong>'],
-      [/(^|[\s\[])\*\*(.+?)\*\*(?=$|[\s\.;:<,\]])/gi, '$1<strong>&#x2a;&#x2a;$2&#x2a;&#x2a;</strong>'],
+      [/(^|[\s\[])\*\*([^\*\s]+(?:(?:\*\*[^*\s]+)*))\*\*(?=$|[\s\.;:<,\]])/gi, '$1<strong><s>&#x2a;&#x2a;</s>$2<s>&#x2a;&#x2a;</s></strong>'],
+      [/(^|[\s\[])\*\*(.+?)\*\*(?=$|[\s\.;:<,\]])/gi, '$1<strong><s>&#x2a;&#x2a;</s>$2<s>&#x2a;&#x2a;</s></strong>'],
 
       // `code` => <code>`italic`</code>
-      [/(^|[\s\[])`([^\`]+?)`(?=$|[\s\.;:<,\]])/gi, '$1<code>&#x60;$2&#x60;</code>'],
+      [/(^|[\s\[])`([^\`]+?)`(?=$|[\s\.;:<,\]])/gi, '$1<code><s>&#x60;</s>$2<s>&#x60;</s></code>'],
 
       // # Header => # <strong>Header</strong>
-      [/(^|\n)(#+\s+)([^\n]+)/gi, '$1$2<strong>$3</strong>'],
+      [/(^|\n)(#+\s+)([^\n]+)/gi, '$1$2<strong class=\'hx\'>$3</strong>'],
+
+      // [link](omg) => [<a href="omg">link</a>](omg)
+      [/\[([^\]]+)\]\(([^\)]+)\)/, '<s>&#x5b;</s><a href=\'$2\'>$1</a><s>&#x5d;&#x28;$2&#x29;</s>'],
+
       // Leading whitespace === teh awesome!
       [/\n/g, '<br>'],
     ];
     for (var i = 0; i < replacement.length; i++)
       text = text.replace(replacement[i][0], replacement[i][1]);
     return '<pre>' + text + '</pre>';
+  },
+
+  /**
+   * Save the caret position by inserting `CARETMARKER`.
+   *
+   * @private
+   */
+  saveCaret_: function () {
+    // If we're not focused, focus.
+    this.editor_.focus();
+    if (window.getSelection) {
+      var selection = window.getSelection();
+      var range = selection.getRangeAt(0);
+      range.insertNode(document.createTextNode('{{ CARETMARKER }}'));
+    }
   },
 
   /**
