@@ -3,7 +3,8 @@ var UI = function (storage) {
   this.listView_.navigationDelegate = this.navigateFromList_.bind(this);
 
   this.editor_ = new Editor('text');
-  this.editor_.persistanceDelegate = this.persistDocument_.bind(this);
+  this.editor_.onpersist = this.persistDocument_.bind(this);
+  this.editor_.onclose = this.showList_.bind(this);
 
   this.storage_ = new Storage(this.storageInitalized_.bind(this));
 };

@@ -53,6 +53,9 @@ Editor.prototype = {
    */
   wordcount_: null,
 
+  onclose: function () {},
+  onpersist: function () {},
+
   set value(text) {
     this.editor_.innerText = text;
     this.update();
@@ -63,14 +66,16 @@ Editor.prototype = {
   },
 
   setNeedsUpdate_: function (e) {
+                     console.log(e.keyCode);
     if (e.keyCode === 16 || // Shift
         e.keyCode === 17 || // Ctrl
         e.keyCode === 18 || // Alt
-        e.keyCode === 27 || // Esc
         e.keyCode === 91 || // Command
         e.keyCode === 93 || // Other command.
         (e.keyCode >= 37 && e.keyCode <= 40)) // Arrow keys
       return;
+    if (e.keyCode === 27) // Esc
+      return this.onclose();
     this.needsUpdate_ = true;
   },
 
@@ -84,8 +89,7 @@ Editor.prototype = {
     if (e.keyCode === 83 && e.metaKey) { // command-s
       e.preventDefault();
       e.stopPropagation();
-      if (this.persistanceDelegate)
-        this.persistanceDelegate(this.editor_.innerText, true);
+      this.onpersist(this.editor_.innerText, true);
       return;
     }
     if (e.keyCode === 8) { // BACKSPACE
@@ -185,11 +189,12 @@ Editor.prototype = {
       [/\>/gi, '&gt;'],
 
       // Caret replacement.
-      [/{{ CARETMARKER }}/, '<mark id="caretmarker"></mark>'],
+      [/{{ CARETBEGIN }}/, '<mark id="caretmarker">'],
+      [/{{ CARETEND }}/, '</mark>'],
 
       // _italic_ => <em>_italic_</em>
-      [/(^|[\s\[])_([^_\s]+(?:(?:_[^_\s]+)*))_(?=$|[\s\.;:<,\]])/gi, '$1<em>&#x5f;$2&#x5f;</em>'],
-      [/(^|[\s\[])_(.+?)_(?=$|[\s\.;:<,\]])/gi, '$1<em>&#x5f;$2&#x5f;</em>'],
+      [/(^|[\s\[])_([^_\s]+(?:(?:_[^_\s]+)*))_(?=$|[\s\.;:<,\]])/gi, '$1<em><s>&#x5f;</s>$2<s>&#x5f;</s></em>'],
+      [/(^|[\s\[])_(.+?)_(?=$|[\s\.;:<,\]])/gi, '$1<em><s>&#x5f;</s>$2<s>&#x5f;</s></em>'],
 
       // **bold** => <strong>bold</strong>
       [/(^|[\s\[])\*\*([^\*\s]+(?:(?:\*\*[^*\s]+)*))\*\*(?=$|[\s\.;:<,\]])/gi, '$1<strong><s>&#x2a;&#x2a;</s>$2<s>&#x2a;&#x2a;</s></strong>'],
@@ -223,7 +228,7 @@ Editor.prototype = {
     if (window.getSelection) {
       var selection = window.getSelection();
       var range = selection.getRangeAt(0);
-      range.insertNode(document.createTextNode('{{ CARETMARKER }}'));
+      range.insertNode(document.createTextNode('{{ CARETBEGIN }}{{ CARETEND }}'));
     }
   },
 
@@ -249,13 +254,13 @@ Editor.prototype = {
   display: function () {
     this.editor_.parentNode.classList.add('active');
     this.timer_ = setInterval((function () {
-      if (this.persistanceDelegate)
-        this.persistanceDelegate(this.editor_.innerText);
+      this.onpersist(this.editor_.innerText);
     }).bind(this), 5000);
   },
   hide: function () {
+    clearInterval(this.timer_);
     this.editor_.blur();
     this.editor_.parentNode.classList.remove('active');
-    clearInterval(this.timer_);
+    this.onpersist(this.editor_.innerText);
   },
 }
