@@ -8,7 +8,7 @@
 var Storage = function (initCallback) {
   this.initCallback_ = initCallback;
 
-  var requestFS = window.requestFileSystem || 
+  var requestFS = window.requestFileSystem ||
                   window.mozRequestFileSystem ||
                   window.webkitRequestFileSystem;
   requestFS(window.TEMPORARY, 10*1024*1024 /*10MB*/, this.onInitFS_.bind(this),
@@ -53,7 +53,7 @@ Storage.prototype = {
 
   onFSError_: function (error) {
     var msg = '';
-    
+
     switch (error.code) {
       case FileError.QUOTA_EXCEEDED_ERR:
         msg = 'QUOTA_EXCEEDED_ERR';
@@ -121,7 +121,7 @@ Storage.prototype = {
    */
   write: function (name, text, callback) {
     this.docroot_.getFile(
-        name, 
+        name,
         {create: true, exclusive: false},
         (function (fileEntry) {
           fileEntry.createWriter(function (writer) {
@@ -131,17 +131,8 @@ Storage.prototype = {
             writer.onerror = function (e) {
               callback(false);
             };
-            
-            var bb;
-            if (window.BlobBuilder)
-              bb = new BlobBuilder();
-            else if (window.MozBlobBuilder)
-              bb = new MozBlobBuilder();
-            else if (window.WebKitBlobBuilder)
-              bb = new WebKitBlobBuilder();
 
-            bb.append(text);
-            writer.write(bb.getBlob('text/plain'));
+            writer.write(new Blob([text], {type: 'text/plain'}));
           });
         }).bind(this),
         this.onFSError_.bind(this));

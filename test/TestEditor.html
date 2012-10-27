@@ -14,6 +14,11 @@
     <ol id="qunit-tests"></ol>
     <div id="qunit-fixture">
       <aside>Counts: <output id="wordcount">0</output>&nbsp;words <output id="charcount">0</output>&nbsp;chars</aside>
+      <nav>
+        <button id="close">Close the editor</button>
+        <button id="download">Download this document</button>
+        <button id="fullscreen">Fullscreen</button>
+      </nav>
       <div id="editor" contenteditable="true"></div>
     </div>
     <script>
@@ -160,7 +165,7 @@
           "sentence _italic_: => sentence <em><s>&#x5f;</s>italic<s>&#x5f;</s>:</em>"
         );
         equal(
-          this.editor_.testProcessText_("caret _italic_{{ CARETMARKER }}"),
+          this.editor_.testProcessText_("caret _italic_{{ CARETBEGIN }}{{ CARETEND }}"),
           "caret <em><s>&#x5f;</s>italic<s>&#x5f;</s></em><mark id=\"caretmarker\"></mark>",
           "caret _italic_| => caret _italic_<mark id=\"caretmarker\"></mark>"
         );
@@ -246,7 +251,7 @@
           "sentence `code`: => sentence <code><s>&#x60;</s>code<s>&#x60;</s>:</code>"
         );
         equal(
-          this.editor_.testProcessText_("caret `code`{{ CARETMARKER }}"),
+          this.editor_.testProcessText_("caret `code`{{ CARETBEGIN }}{{ CARETEND }}"),
           "caret <code><s>&#x60;</s>code<s>&#x60;</s></code><mark id=\"caretmarker\"></mark>",
           "caret `code`| => caret `code`<mark id=\"caretmarker\"></mark>"
         );

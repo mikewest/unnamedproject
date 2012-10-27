@@ -79,7 +79,6 @@ Editor.prototype = {
   },
 
   setNeedsUpdate_: function (e) {
-                     console.log(e.keyCode);
     if (e.keyCode === 16 || // Shift
         e.keyCode === 17 || // Ctrl
         e.keyCode === 18 || // Alt
@@ -176,7 +175,8 @@ Editor.prototype = {
    * @private
    */
   updateCount_: function (text) {
-    var cur = text.replace(/^---\s[\S\s]+?\s---\s/, '');
+    var cur = text.replace(/^---\s[\S\s]+?\s---\s/, '')
+                  .replace(/(^\s+)|(\s+$)/, '');
     this.charcount_.innerText = cur.split('').length;
     if (this.charcount_.innerText === "0") 
       this.wordcount_.innerText = '0';
@@ -231,7 +231,7 @@ Editor.prototype = {
   },
 
   /**
-   * Save the caret position by inserting `CARETMARKER`.
+   * Save the caret position by inserting `{{ CARETBEGIN }}{{ CARETEND }}`.
    *
    * @private
    */
