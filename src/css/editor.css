@@ -1,20 +1,17 @@
-#editorsection {
-  background: #EEE8D5;
-}
 
 nav {
   position: absolute;
-  bottom: 10px;
+  bottom: 0;
   left: -webkit-calc(50% - 560px);
 }
 nav button {
-  background: #002B36 url(/img/cross.png) no-repeat center center;
+  background: #000 url(/img/cross.png) no-repeat center center;
   border-radius: 10px;
   border: 0;
   cursor: pointer;
   display: block;
   height: 40px;
-  margin-bottom: 1em;
+  margin-bottom: 10px;
   opacity: 0.25;
   overflow: hidden;
   padding: 0;
@@ -50,10 +47,11 @@ nav button:hover {
   overflow-y: scroll;
   padding: 0 10px 10px;
   width: 999px;
-  border: 1px solid #93A1A1;
+  border: 1px solid #000;
   border-width: 0 1px;
 
   resize: none;
+  -webkit-user-modify: read-write-plaintext-only;
 }
 .editor #caretmarker {
   display: none;
@@ -90,14 +88,46 @@ nav button:hover {
 }
 aside {
   position: fixed;
-  left: -webkit-calc(50% + 254px);
-  top: 0;
-  font: 1em Inconsolata;
-  text-align: right;
-  width: 240px;
+  left: -webkit-calc(50% + 260px);
+  bottom: 0;
+  font: 15px/1.5 Inconsolata;
+  text-align: center;
+  width: 250px;
+}
+
+/** BLACK COLOR SCHEME **/
+.black nav button {
+  background-color: #333;
+}
+.black #editorsection {
+  background: #111;
+}
+.black .aside {
+  background: rgba(0, 0, 0, 0.5);
+  color: #999;
+}
+.black .editor {
+  background: #000;
+  color: #CCC;
+  border-color: #222;
+}
+.black s {
+  color: #666;
+}
+.black code s {
+  color: #C0766E;
+}
+.black a {
+  color: #82ADB0;
+}
+.black a.referent {
+  opacity: 0.5;
 }
 
 /** LIGHT COLOR SCHEME **/
+.light #editorsection {
+  background: #EEE8D5;
+}
 .light .editor {
   background: #FDF6E3;
   color: #657B83;

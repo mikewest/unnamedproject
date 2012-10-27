@@ -25,13 +25,21 @@ body > section.active {
   -webkit-transform: translate(0,0);
   z-index: 2;
 }
+body.black {
+  background: #111;
+}
 body.light {
   background: #FDF6E3;
 }
 body.dark {
   background: #002B36;
 }
-.light ::-moz-selection{
+.black ::selection {
+  background: #888;
+  color: #FFF;
+  text-shadow: none;
+}
+.light ::-moz-selection {
   background: #839496;
   color:#fff;
   text-shadow: none;

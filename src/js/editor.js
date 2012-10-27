@@ -142,7 +142,7 @@ Editor.prototype = {
       if (window.getSelection) {
         var selection = window.getSelection();
         var range = selection.getRangeAt(0);
-        range.insertNode(document.createElement('br'));
+        range.insertNode(document.createTextNode('\n'));
         range.collapse(false);
         selection.removeAllRanges();
         selection.addRange(range);
@@ -178,7 +178,7 @@ Editor.prototype = {
     var cur = text.replace(/^---\s[\S\s]+?\s---\s/, '')
                   .replace(/(^\s+)|(\s+$)/, '');
     this.charcount_.innerText = cur.split('').length;
-    if (this.charcount_.innerText === "0") 
+    if (this.charcount_.innerText === "0")
       this.wordcount_.innerText = '0';
     else
       this.wordcount_.innerText = cur.split(/ /).length;
@@ -213,17 +213,23 @@ Editor.prototype = {
       [/(^|[\s\[])\*\*([^\*\s]+(?:(?:\*\*[^*\s]+)*))\*\*(?=$|[\s\.;:<,\]])/gi, '$1<strong><s>&#x2a;&#x2a;</s>$2<s>&#x2a;&#x2a;</s></strong>'],
       [/(^|[\s\[])\*\*(.+?)\*\*(?=$|[\s\.;:<,\]])/gi, '$1<strong><s>&#x2a;&#x2a;</s>$2<s>&#x2a;&#x2a;</s></strong>'],
 
-      // `code` => <code>`italic`</code>
+      // `code` => <code>`code`</code>
       [/(^|[\s\[])`([^\`]+?)`(?=$|[\s\.;:<,\]])/gi, '$1<code><s>&#x60;</s>$2<s>&#x60;</s></code>'],
 
       // # Header => # <strong>Header</strong>
       [/(^|\n)(#+\s+)([^\n]+)/gi, '$1$2<strong class=\'hx\'>$3</strong>'],
 
       // [link](omg) => [<a href="omg">link</a>](omg)
-      [/\[([^\]]+)\]\(([^\)]+)\)/, '<s>&#x5b;</s><a href=\'$2\'>$1</a><s>&#x5d;&#x28;$2&#x29;</s>'],
+      [/\[([^\]]+)\]\(([^ \)]+)\)/gi, '<s>&#x5b;</s><a href=\'$2\'>$1</a><s>&#x5d;&#x28;$2&#x29;</s>'],
+
+      // [link][omg] => [<a href="#omg">link</a>][omg]
+      [/\[([^\]]+)\]\[([^ \]]+)\]/gi, '<s>&#x5b;</s><a href=\'#$2\'>$1</a><s>&#x5d;&#x5b;$2&#x5d;</s>'],
+
+      // ^[slug]: url => [slug]: <a href="url">url</a>
+      [/(^|\n)\[([^ \]]+)\]: ([^\s<]+)/, '$1<s>&#x5b;$2&#x5d;:</s> <a href="$3" class="referent">$3</a>'],
 
       // Leading whitespace === teh awesome!
-      [/\n/g, '<br>'],
+      //[/\n/g, '<br>'],
     ];
     for (var i = 0; i < replacement.length; i++)
       text = text.replace(replacement[i][0], replacement[i][1]);

@@ -42,7 +42,7 @@ UI.prototype = {
     this.editor_.hide();
 
     this.storage_.list((function (files) {
-      this.listView_.render(files, new Date()); 
+      this.listView_.render(files, new Date());
       this.listView_.display();
     }).bind(this));
   },
@@ -69,7 +69,7 @@ UI.prototype = {
             event.initMouseEvent(
               "click", true, false, a, 0, 0, 0, 0, 0
               , false, false, false, false, 0, null);
-            return a.dispatchEvent(event); 
+            return a.dispatchEvent(event);
           }).bind(this));
         }
       }).bind(this));
@@ -82,10 +82,6 @@ UI.prototype = {
     this.listView_.hide();
     this.editor_.hide();
 
-    var date = window.location.pathname.match(/\/(\d{4}-\d{2}-\d{2})\//);
-    if (date && date[1])
-      this.showEditor_(date[1]);
-    else
-      this.showList_();
+    this.showEditor_('2012-03-13');
   }
 };

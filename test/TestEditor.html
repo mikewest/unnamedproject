@@ -308,7 +308,17 @@
         equal(
           this.editor_.testProcessText_("[text](url)"),
           "<s>&#x5b;</s><a href='url'>text</a><s>&#x5d;&#x28;url&#x29;</s>",
-          "[text](url) => omg"
+          "[text](url) => <s>[</s><a href='url'>text</a><s>](url)</s>"
+        );
+        equal(
+          this.editor_.testProcessText_("[text][slug]"),
+          "<s>&#x5b;</s><a href='#slug'>text</a><s>&#x5d;&#x5b;slug&#x5d;</s>",
+          "[text][slug] => <s>[</s><a href='#slug'>text</a><s>][slug]</s>"
+        );
+        equal(
+          this.editor_.testProcessText_("[`code`][slug]"),
+          "<s>&#x5b;</s><a href='#slug'><code><s>&#x60;</s>code<s>&#x60;</s></code></a><s>&#x5d;&#x5b;slug&#x5d;</s>",
+          "[`code`][slug] => <s>[</s><a href='#slug'><code><s>`</s>text<s>`</s></code></a><s>][slug]</s>"
         );
       });
     </script>
