@@ -114,6 +114,9 @@ aside {
 .black s {
   color: #666;
 }
+.black code {
+  background: rgba(255, 255, 255, 0.1);
+}
 .black code s {
   color: #C0766E;
 }
