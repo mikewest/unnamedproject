@@ -26,7 +26,7 @@
         setup: function () {
           this.editor_ = new Editor('editor');
           this.editor_.testProcessText_ = function (text) {
-            return this.processText_(text).replace(/^<pre>/, '').replace(/<br><\/pre>$/, '');
+            return this.processText_(text).replace(/^<pre>/, '').replace(/\n<\/pre>$/, '');
           };
         },
         teardown: function () {
@@ -293,12 +293,12 @@
         );
         equal(
           this.editor_.testProcessText_("This is\n# a heading"),
-          "This is<br># <strong class='hx'>a heading</strong>",
-          "This is\n# a heading => This is<br># <strong class='hx'>a heading</strong>"
+          "This is\n# <strong class='hx'>a heading</strong>",
+          "This is\n# a heading => This is\n# <strong class='hx'>a heading</strong>"
         );
         equal(
           this.editor_.testProcessText_("# Heading 1\n## Heading 2"),
-          "# <strong class='hx'>Heading 1</strong><br>## <strong class='hx'>Heading 2</strong>",
+          "# <strong class='hx'>Heading 1</strong>\n## <strong class='hx'>Heading 2</strong>",
           "## Heading 2 => ## <strong class='hx'>Heading 2</strong>"
         );
       });
