@@ -28,13 +28,6 @@ var Editor = function(editorID) {
       document.body.mozRequestFullScreen();
   }).bind(this));
 
-  var timer = (function () {
-    window.webkitRequestAnimationFrame(timer);
-    if (this.needsUpdate_)
-      this.update();
-  }).bind(this);
-  window.webkitRequestAnimationFrame(timer);
-
   // Kick things off by focusing on the editor and running a style update.
   this.editor_.focus();
   this.update();
@@ -88,7 +81,11 @@ Editor.prototype = {
       return;
     if (e.keyCode === 27) // Esc
       return this.onclose();
-    this.needsUpdate_ = true;
+
+    if (!this.needsUpdate_) {
+      this.needsUpdate_ = true;
+      window.requestAnimationFrame(this.update.bind(this));
+    }
   },
 
   /**
@@ -226,7 +223,7 @@ Editor.prototype = {
       [/\[([^\]]+)\]\[([^ \]]+)\]/gi, '<s>&#x5b;</s><a href=\'#$2\'>$1</a><s>&#x5d;&#x5b;$2&#x5d;</s>'],
 
       // ^[slug]: url => [slug]: <a href="url">url</a>
-      [/(^|\n)\[([^ \]]+)\]: ([^\s<]+)/, '$1<s>&#x5b;$2&#x5d;:</s> <a href="$3" class="referent">$3</a>'],
+      [/(^|\n)\[([^ \]]+)\]: ([^\s<]+)/gi, '$1<s>&#x5b;$2&#x5d;:</s> <a href="$3" class="referent">$3</a>'],
 
       // Leading whitespace === teh awesome!
       //[/\n/g, '<br>'],
@@ -276,6 +273,7 @@ Editor.prototype = {
       this.onpersist(this.editor_.innerText);
     }).bind(this), 5000);
   },
+
   hide: function () {
     clearInterval(this.timer_);
     this.editor_.blur();

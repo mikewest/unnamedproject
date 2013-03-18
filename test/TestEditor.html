@@ -31,7 +31,7 @@
         },
         teardown: function () {
           this.editor_ = null;
-        } 
+        }
       });
       test("Replace & and < and >.", function () {
         equal(
@@ -319,6 +319,16 @@
           this.editor_.testProcessText_("[`code`][slug]"),
           "<s>&#x5b;</s><a href='#slug'><code><s>&#x60;</s>code<s>&#x60;</s></code></a><s>&#x5d;&#x5b;slug&#x5d;</s>",
           "[`code`][slug] => <s>[</s><a href='#slug'><code><s>`</s>text<s>`</s></code></a><s>][slug]</s>"
+        );
+        equal(
+          this.editor_.testProcessText_("[slug]: http://example.com/"),
+          "<s>&#x5b;slug&#x5d;:</s> <a href=\"http://example.com/\" class=\"referent\">http://example.com/</a>",
+          "[slug]: http://example.com/ => <s>[slug]:</s> <a href='http://example.com' class='referent'>http://example.com/</a>"
+        );
+        equal(
+          this.editor_.testProcessText_("[slug1]: http://1.example.com/\n[slug2]: http://2.example.com/"),
+          "<s>&#x5b;slug1&#x5d;:</s> <a href=\"http://1.example.com/\" class=\"referent\">http://1.example.com/</a>\n<s>&#x5b;slug2&#x5d;:</s> <a href=\"http://2.example.com/\" class=\"referent\">http://2.example.com/</a>",
+          "[slug]: http://example.com/ => <s>[slug]:</s> <a href='http://example.com' class='referent'>http://example.com/</a>"
         );
       });
     </script>
